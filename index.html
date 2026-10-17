@@ -3,29 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Ventas - Mapa 2D</title>
-  <style>
-    body {
-      margin: 0;
-      background: #222;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-    canvas {
-      background: #3a7d44;
-      border: 3px solid #fff;
-      margin-top: 20px;
-    }
-  </style>
+  <title>Ventas GO - Huacho</title>
+  <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-  <h1>Sistema de Ventas - Mapa 2D</h1>
-  <canvas id="mapa" width="640" height="480"></canvas>
+  <h1>Plaza de Armas de Huacho - Ventas GO</h1>
+  
+  <!-- Contenedor principal del juego -->
+  <div id="game-container">
+    
+    <!-- Mapa de fondo -->
+    <img src="assets/MAPA2D/MAPA.jpg" id="game-map" alt="Mapa de Huacho">
+    
+    <!-- Personaje Jugador -->
+    <div id="player">
+       <img src="assets/PERSONAJE/P1-SINFONDO.png" alt="Personaje 1" id="player-sprite">
+    </div>
 
-  <!-- Se activan cuando existan los archivos -->
-  <!-- <script src="js/mapa/mapa.js"></script> -->
-  <!-- <script src="js/ventas/productos.js"></script> -->
-  <!-- <script src="js/ventas/carrito.js"></script> -->
+    <!-- Ejemplo de un punto de interacción (Tienda) invisible sobre Norky's -->
+    <button class="shop-trigger" style="top: 25%; left: 15%;" onclick="openShop('Norky\'s')"></button>
+    <button class="shop-trigger" style="top: 15%; right: 10%;" onclick="openShop('Chifa Beijing')"></button>
+
+  </div>
+
+  <!-- Modal de Compra -->
+  <div id="shop-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2 id="shop-title">Tienda</h2>
+      <p>¿Qué deseas comprar?</p>
+      <button onclick="buyItem('Pollo a la brasa', 50)">Comprar (50 pts)</button>
+      <button class="close-btn" onclick="closeShop()">Cerrar</button>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
 </body>
 </html>

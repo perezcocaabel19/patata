@@ -1,0 +1,80 @@
+/* Estilos generales */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #1e272e;
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Contenedor del Juego */
+#game-container {
+  position: relative;
+  width: 900px; /* Ajusta este ancho según tu pantalla */
+  height: 500px; /* Ajusta este alto */
+  margin: 0 auto;
+  border: 4px solid #fbc531;
+  border-radius: 12px;
+  overflow: hidden; /* Para que el personaje no salga del recuadro */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* El mapa de fondo (Tu imagen) */
+#game-map {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Asegura que llene el contenedor */
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1; /* Nivel base */
+}
+
+/* El Personaje (P1.png) */
+#player {
+  position: absolute;
+  top: 50%; /* Posición inicial en el centro (la pérgola) */
+  left: 50%;
+  width: 48px;  /* Ajusta el tamaño de tu personaje aquí */
+  height: 48px;
+  transition: all 0.1s ease; /* Transición suave al moverse */
+  z-index: 10; /* Por encima del mapa */
+  transform: translate(-50%, -50%); /* Centrar el punto de anclaje */
+}
+
+#player-sprite {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Botones invisibles sobre las tiendas reales del mapa para interactuar */
+.shop-trigger {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparente para ver dónde están, luego ponlo a 0 */
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 5;
+}
+.shop-trigger:hover {
+  background: rgba(251, 197, 49, 0.4);
+}
+
+/* Estilos del Modal (Igual que antes) */
+.modal {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+}
+.modal.hidden { display: none; }
+.modal-content {
+  background: #fff; color: #333; padding: 25px; border-radius: 10px; width: 320px;
+}
+.close-btn {
+  background: #e74c3c; color: white; border: none; padding: 10px 15px; margin-top: 15px; cursor: pointer; border-radius: 5px; width: 100%; font-weight: bold;
+}
