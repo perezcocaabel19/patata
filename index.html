@@ -18,14 +18,29 @@
       margin-top: 20px;
     }
   </style>
+  <link rel="stylesheet" href="css/ventas.css">
 </head>
 <body>
   <h1>Sistema de Ventas - Mapa 2D</h1>
   <canvas id="mapa" width="640" height="480"></canvas>
+  <section id="tienda">
+      <h2>Catálogo de productos</h2>
 
+      <div id="catalogo"></div>
+  </section>
+
+  <section id="carrito">
+      <h2>Carrito</h2>
+
+      <div id="lista-carrito"></div>
+
+      <p>Total: S/ <span id="total">0.00</span></p>
+  </section>
   <!-- Se activan cuando existan los archivos -->
   <!-- <script src="js/mapa/mapa.js"></script> -->
   <!-- <script src="js/ventas/productos.js"></script> -->
   <!-- <script src="js/ventas/carrito.js"></script> -->
+    <script src="js/ventas/productos.js"></script>
+    <script src="js/ventas/carrito.js"></script>
 </body>
 </html>

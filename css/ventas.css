@@ -1,0 +1,281 @@
+/* =========================================
+   CATÁLOGO DE PRODUCTOS
+========================================= */
+
+#tienda {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+#tienda h2 {
+    margin-bottom: 25px;
+}
+
+
+/* =========================================
+   LISTA DEL CATÁLOGO
+========================================= */
+
+#catalogo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+
+/* =========================================
+   TARJETA DEL PRODUCTO
+========================================= */
+
+.producto {
+    background: #2b2b2b;
+    border: 2px solid #444;
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: left;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.producto:hover {
+    transform: translateY(-5px);
+    border-color: #ffffff;
+}
+
+
+/* =========================================
+   IMAGEN DEL PRODUCTO
+========================================= */
+
+.producto-imagen {
+    width: 100%;
+    height: 220px;
+    background: #181818;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.producto-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* =========================================
+   INFORMACIÓN DEL PRODUCTO
+========================================= */
+
+.producto-info {
+    padding: 15px;
+}
+
+.producto-info h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+.producto-info .categoria {
+    margin: 0 0 10px;
+    color: #aaaaaa;
+    font-size: 14px;
+}
+
+.producto-info .precio {
+    margin: 0 0 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+/* =========================================
+   BOTÓN AGREGAR AL CARRITO
+========================================= */
+
+.producto button {
+    width: 100%;
+    padding: 10px;
+
+    border: none;
+    border-radius: 6px;
+
+    background: #ffffff;
+    color: #222222;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: opacity 0.2s;
+}
+
+.producto button:hover {
+    opacity: 0.8;
+}
+
+
+/* =========================================
+   CARRITO
+========================================= */
+
+#carrito {
+    width: 90%;
+    max-width: 900px;
+
+    margin: 50px auto;
+
+    padding: 25px;
+
+    background: #2b2b2b;
+    border: 2px solid #444;
+    border-radius: 10px;
+
+    text-align: left;
+}
+
+#carrito h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+
+/* =========================================
+   LISTA DEL CARRITO
+========================================= */
+
+#lista-carrito {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+/* =========================================
+   PRODUCTO DENTRO DEL CARRITO
+========================================= */
+
+.item-carrito {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 15px;
+
+    background: #1f1f1f;
+
+    border-radius: 8px;
+}
+
+.item-carrito h3 {
+    margin: 0 0 5px;
+}
+
+.item-carrito p {
+    margin: 4px 0;
+    color: #bbbbbb;
+}
+
+
+/* =========================================
+   BOTONES DEL CARRITO
+========================================= */
+
+.item-carrito button {
+    border: none;
+    border-radius: 5px;
+
+    padding: 7px 12px;
+
+    margin: 2px;
+
+    background: #ffffff;
+    color: #222222;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.item-carrito button:hover {
+    opacity: 0.8;
+}
+
+
+/* =========================================
+   CANTIDAD
+========================================= */
+
+.item-carrito span {
+    display: inline-block;
+
+    min-width: 25px;
+
+    text-align: center;
+
+    font-weight: bold;
+}
+
+
+/* =========================================
+   TOTAL
+========================================= */
+
+#carrito > p {
+    margin-top: 25px;
+    padding-top: 20px;
+
+    border-top: 1px solid #444;
+
+    text-align: right;
+
+    font-size: 22px;
+    font-weight: bold;
+}
+
+#total {
+    font-size: 25px;
+}
+
+
+/* =========================================
+   MENSAJE CARRITO VACÍO
+========================================= */
+
+#lista-carrito > p {
+    text-align: center;
+
+    padding: 25px;
+
+    color: #aaaaaa;
+}
+
+
+/* =========================================
+   ADAPTACIÓN PARA CELULAR
+========================================= */
+
+@media (max-width: 600px) {
+
+    #tienda,
+    #carrito {
+        width: 94%;
+    }
+
+    .item-carrito {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .producto-imagen {
+        height: 200px;
+    }
+}
