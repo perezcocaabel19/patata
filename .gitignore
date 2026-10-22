@@ -7,3 +7,5 @@ Thumbs.db
 bin/
 out/
 *.class
+__pycache__/
+*.pyc

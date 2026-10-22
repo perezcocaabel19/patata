@@ -8,22 +8,47 @@
 </head>
 <body>
   <h1>Plaza de Armas de Huacho - Ventas GO</h1>
-  
+
+  <div class="barra">
+    <div class="personajes">
+      <span>Personaje:</span>
+      <button data-personaje="0" class="activo" title="Tecla 1">P1</button>
+      <button data-personaje="1" title="Tecla 2">P2</button>
+      <button data-personaje="2" title="Tecla 3">P3</button>
+    </div>
+    <div class="ayuda">
+      <span><b>WASD</b> o <b>flechas</b> mover</span>
+      <span><b>E</b> entrar a tienda</span>
+      <span><b>1 2 3</b> cambiar personaje</span>
+      <span><b>G</b> ver zonas</span>
+    </div>
+  </div>
+
   <!-- Contenedor principal del juego -->
   <div id="game-container">
-    
+
     <!-- Mapa de fondo -->
     <img src="assets/MAPA2D/MAPA.jpg" id="game-map" alt="Mapa de Huacho">
-    
+
+    <!-- Capa de depuracion (zonas caminables) -->
+    <canvas id="capa-debug"></canvas>
+
     <!-- Personaje Jugador -->
     <div id="player">
-       <img src="assets/PERSONAJE/P1-SINFONDO.png" alt="Personaje 1" id="player-sprite">
+      <img src="assets/PERSONAJE/frames/p1-f1.png" alt="Personaje" id="player-sprite">
     </div>
 
-    <!-- Ejemplo de un punto de interacción (Tienda) invisible sobre Norky's -->
-    <button class="shop-trigger" style="top: 25%; left: 15%;" onclick="openShop('Norky\'s')"></button>
-    <button class="shop-trigger" style="top: 15%; right: 10%;" onclick="openShop('Chifa Beijing')"></button>
+    <!-- Puntos de interaccion (Tiendas) -->
+    <button class="shop-trigger" style="left: 18.3%; top: 31%;" title="Norky's"></button>
+    <button class="shop-trigger" style="left: 86.7%; top: 21%;" title="Chifa Beijing"></button>
 
+    <!-- Aviso de tienda cercana -->
+    <div id="pista-tienda"></div>
+
+    <!-- HUD -->
+    <div id="hud">
+      <span id="hud-pos">x: 50%  y: 66%</span>
+    </div>
   </div>
 
   <!-- Modal de Compra -->
@@ -31,11 +56,14 @@
     <div class="modal-content">
       <h2 id="shop-title">Tienda</h2>
       <p>¿Qué deseas comprar?</p>
-      <button onclick="buyItem('Pollo a la brasa', 50)">Comprar (50 pts)</button>
-      <button class="close-btn" onclick="closeShop()">Cerrar</button>
+      <div id="shop-items"></div>
+      <button class="close-btn" onclick="Juego.cerrarTienda()">Cerrar</button>
     </div>
   </div>
 
+  <script src="js/mapa/datos.js"></script>
+  <script src="js/mapa/zonas.js"></script>
+  <script src="js/mapa/juego.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

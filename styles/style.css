@@ -8,73 +8,227 @@ body {
   padding: 20px;
 }
 
-/* Contenedor del Juego */
+h1 {
+  font-size: 22px;
+  margin: 0 0 14px;
+  letter-spacing: 1px;
+  color: #fbc531;
+}
+
+/* Barra superior: selector de personaje + ayuda */
+.barra {
+  width: 900px;
+  max-width: 96vw;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: #b5bcc2;
+}
+
+.personajes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.personajes button {
+  background: #2f3640;
+  color: #dcdde1;
+  border: 2px solid #485460;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.personajes button.activo {
+  background: #fbc531;
+  color: #1e272e;
+  border-color: #e1b12c;
+}
+
+.ayuda {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ayuda b {
+  color: #fbc531;
+}
+
+/* Contenedor del Juego: misma proporcion que MAPA.jpg (2752 x 1536) */
 #game-container {
   position: relative;
-  width: 900px; /* Ajusta este ancho según tu pantalla */
-  height: 500px; /* Ajusta este alto */
+  width: 900px;
+  max-width: 96vw;
+  aspect-ratio: 2752 / 1536;
   margin: 0 auto;
   border: 4px solid #fbc531;
   border-radius: 12px;
-  overflow: hidden; /* Para que el personaje no salga del recuadro */
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  overflow: hidden; /* el personaje nunca sale del recuadro */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background: #000;
+  touch-action: none;
 }
 
-/* El mapa de fondo (Tu imagen) */
+/* El mapa de fondo */
 #game-map {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Asegura que llene el contenedor */
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1; /* Nivel base */
+  object-fit: fill; /* el contenedor ya tiene la misma proporcion */
+  z-index: 1;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
-/* El Personaje (P1.png) */
+/* El Personaje: el ancla es la punta de los pies */
 #player {
   position: absolute;
-  top: 50%; /* Posición inicial en el centro (la pérgola) */
   left: 50%;
-  width: 48px;  /* Ajusta el tamaño de tu personaje aquí */
-  height: 48px;
-  transition: all 0.1s ease; /* Transición suave al moverse */
-  z-index: 10; /* Por encima del mapa */
-  transform: translate(-50%, -50%); /* Centrar el punto de anclaje */
+  top: 66%;
+  transform: translate(-50%, -100%);
+  z-index: 10;
+  pointer-events: none;
+  will-change: left, top;
 }
 
 #player-sprite {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  display: block;
+  height: 90px; /* lo recalcula juego.js segun el tamano del mapa */
+  width: auto;
+  transform-origin: center bottom;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
-/* Botones invisibles sobre las tiendas reales del mapa para interactuar */
+/* Capa de depuracion (tecla G) */
+#capa-debug {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* Botones invisibles sobre las tiendas reales del mapa */
 .shop-trigger {
   position: absolute;
-  width: 60px;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.2); /* Semi-transparente para ver dónde están, luego ponlo a 0 */
-  border: 2px dashed rgba(255, 255, 255, 0.5);
+  width: 6%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px dashed rgba(255, 255, 255, 0.25);
   border-radius: 50%;
   cursor: pointer;
   z-index: 5;
-}
-.shop-trigger:hover {
-  background: rgba(251, 197, 49, 0.4);
+  padding: 0;
 }
 
-/* Estilos del Modal (Igual que antes) */
+.shop-trigger:hover {
+  background: rgba(251, 197, 49, 0.35);
+  border-color: #fbc531;
+}
+
+/* Aviso de tienda cercana */
+#pista-tienda {
+  position: absolute;
+  left: 50%;
+  bottom: 5%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.82);
+  border: 2px solid #fbc531;
+  color: #fbc531;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  z-index: 30;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+#pista-tienda.visible {
+  opacity: 1;
+}
+
+/* HUD de coordenadas */
+#hud {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 30;
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 3px 7px;
+  border-radius: 5px;
+  pointer-events: none;
+}
+
+/* Modal */
 .modal {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8);
-  display: flex; align-items: center; justify-content: center;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 100;
 }
-.modal.hidden { display: none; }
-.modal-content {
-  background: #fff; color: #333; padding: 25px; border-radius: 10px; width: 320px;
+
+.modal.hidden {
+  display: none;
 }
+
+.modal-content {
+  background: #fff;
+  color: #333;
+  padding: 25px;
+  border-radius: 10px;
+  width: 320px;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: #1e272e;
+}
+
+#shop-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+#shop-items button {
+  background: #fbc531;
+  color: #1e272e;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
 .close-btn {
-  background: #e74c3c; color: white; border: none; padding: 10px 15px; margin-top: 15px; cursor: pointer; border-radius: 5px; width: 100%; font-weight: bold;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-top: 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+  font-weight: bold;
 }
