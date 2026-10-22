@@ -17,3 +17,4 @@ Sistema de ventas interactivo con mapa 2D estilo Pokémon.
 ## Integrantes
 
 - Pacheco Manrique, Lazlo, Abel Perez
+
