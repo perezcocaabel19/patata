@@ -58,9 +58,27 @@ const TIENDAS = [
     productos: [{ nombre: 'Pollo a la brasa', precio: 50 }],
   },
   {
+    nombre: 'Tambo',
+    x: 7.38,
+    y: 42.3,
+    productos: [{ nombre: 'Empanada de pino', precio: 30 }],
+  },
+  {
+    nombre: 'Brujas',
+    x: 29.7,
+    y: 18.3,
+    productos: [{ nombre: 'Pocion curativa', precio: 45 }],
+  },
+  {
     nombre: 'Chifa Beijing',
-    x: 86.7,
-    y: 21,
+    x: 93.1,
+    y: 45.1,
     productos: [{ nombre: 'Arroz chaufa', precio: 25 }],
+  },
+  {
+    nombre: 'Chifa Yoshi',
+    x: 8.9,
+    y: 85.3,
+    productos: [{ nombre: 'Sopa de fideos', precio: 18 }],
   },
 ];
