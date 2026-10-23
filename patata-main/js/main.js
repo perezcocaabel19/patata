@@ -30,7 +30,9 @@ function seleccionarPersonajeLogin(idx) {
   // Solo se permiten 0 (P1 - Chico) y 1 (P2 - Chica)
   personajeLoginSeleccionado = (idx === 1) ? 1 : 0;
   document.querySelectorAll('.card-personaje').forEach((card, i) => {
-    card.classList.toggle('activo', i === personajeLoginSeleccionado);
+    const activo = i === personajeLoginSeleccionado;
+    card.classList.toggle('activo', activo);
+    card.setAttribute('aria-pressed', activo ? 'true' : 'false');
   });
 }
 
@@ -82,7 +84,15 @@ function actualizarInfoClienteUI(nombre, personajeIdx) {
   const hudCliente = document.getElementById('hud-cliente');
   if (hudCliente) {
     const charNombre = personajeIdx === 0 ? 'P1 - Chico' : 'P2 - Chica';
-    hudCliente.innerHTML = `👤 <b>${nombre}</b> | 🎮 <span>${charNombre}</span>`;
+    // Se usa textContent para que el nombre no se interprete como HTML
+    hudCliente.textContent = '';
+    hudCliente.append('👤 ');
+    const nombreNegrita = document.createElement('b');
+    nombreNegrita.textContent = nombre;
+    hudCliente.append(nombreNegrita, ' | 🎮 ');
+    const personajeSpan = document.createElement('span');
+    personajeSpan.textContent = charNombre;
+    hudCliente.append(personajeSpan);
   }
 
   const barraNombre = document.getElementById('barra-cliente-nombre');
@@ -105,6 +115,24 @@ function actualizarInfoClienteUI(nombre, personajeIdx) {
 // INICIALIZACIÓN GENERAL
 // ===============================
 document.addEventListener('DOMContentLoaded', function () {
+  // Bloquear el teclado del juego mientras el modal de login esta visible.
+  // Se escucha en fase de captura para que juego.js no reciba las teclas.
+  const modalLogin = document.getElementById('login-modal');
+  if (modalLogin) {
+    modalLogin.addEventListener('keydown', function (e) {
+      if (modalLogin.classList.contains('hidden')) return;
+      // Permitir escribir con normalidad en el campo del nombre
+      if (e.target && e.target.id === 'input-nombre') return;
+      e.stopPropagation();
+    }, true);
+    // Segunda barrera: si se escribe el nombre, la tecla ya llego al campo,
+    // pero se corta antes de que juego.js la reciba en window
+    modalLogin.addEventListener('keydown', function (e) {
+      if (modalLogin.classList.contains('hidden')) return;
+      if (e.target && e.target.id === 'input-nombre') e.stopPropagation();
+    }, false);
+  }
+
   // Asignar eventos de clic a todos los triggers de tiendas sobre el mapa
   document.querySelectorAll('.shop-trigger').forEach(function (boton) {
     boton.addEventListener('click', function () {

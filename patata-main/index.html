@@ -148,16 +148,16 @@
         <div class="campo">
           <label>ELIGE TU PERSONAJE (Te acompañará durante toda la estadía):</label>
           <div class="selector-personajes-login">
-            <div class="card-personaje activo" data-p="0" onclick="seleccionarPersonajeLogin(0)">
+            <button type="button" class="card-personaje activo" data-p="0" aria-pressed="true" onclick="seleccionarPersonajeLogin(0)">
               <img src="assets/PERSONAJE/frames/p1-f1.png" alt="P1 Chico">
               <b>P1 - Chico</b>
               <small>Explorador</small>
-            </div>
-            <div class="card-personaje" data-p="1" onclick="seleccionarPersonajeLogin(1)">
+            </button>
+            <button type="button" class="card-personaje" data-p="1" aria-pressed="false" onclick="seleccionarPersonajeLogin(1)">
               <img src="assets/PERSONAJE/frames/p2-f1.png" alt="P2 Chica">
               <b>P2 - Chica</b>
               <small>Visitante</small>
-            </div>
+            </button>
           </div>
           <small class="nota-personaje">Nota: No podrás cambiar de personaje hasta que salgas de la plaza.</small>
         </div>
