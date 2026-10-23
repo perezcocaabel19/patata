@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-// Dibuja el personaje. Si existe assets/personajes/<nombre>.png usa esa imagen;
+// Dibuja el personaje. Si existe el frame real en assets/PERSONAJE/frames usa esa imagen;
 // si no, dibuja un sprite pixel art de prueba hecho con codigo.
 public class SpritePersonaje {
 
@@ -35,20 +35,50 @@ public class SpritePersonaje {
 
     private static final Map<String, BufferedImage> cache = new HashMap<>();
 
+    // Ruta del frame real de cada personaje
+    private static String ruta(String tipo) {
+        if ("Chico".equals(tipo)) {
+            return "assets/PERSONAJE/frames/p1-f1.png";
+        }
+        if ("Chica".equals(tipo)) {
+            return "assets/PERSONAJE/frames/p2-f1.png";
+        }
+        return null;
+    }
+
     private static BufferedImage imagen(String tipo) {
-        if (!cache.containsKey(tipo)) {
+        String ruta = ruta(tipo);
+        if (ruta == null) {
+            return null;
+        }
+        if (!cache.containsKey(ruta)) {
             BufferedImage img = null;
             try {
-                File f = new File("assets/personajes/" + tipo.toLowerCase() + ".png");
+                File f = new File(ruta);
                 if (f.exists()) {
                     img = ImageIO.read(f);
                 }
             } catch (Exception e) {
                 img = null;
             }
-            cache.put(tipo, img);
+            cache.put(ruta, img);
         }
-        return cache.get(tipo);
+        return cache.get(ruta);
+    }
+
+    // Alto final del sprite al dibujarse con la escala elegida
+    public static int alto(String tipo, int escala) {
+        return ALTO * escala;
+    }
+
+    // Ancho final calculado con la proporcion real de la imagen, sin deformarla
+    public static int ancho(String tipo, int escala) {
+        BufferedImage img = imagen(tipo);
+        int alto = alto(tipo, escala);
+        if (img != null && img.getHeight() > 0) {
+            return Math.max(1, Math.round(img.getWidth() * (float) alto / img.getHeight()));
+        }
+        return ANCHO * escala;
     }
 
     public static void dibujar(Graphics g0, int x, int y, int escala, String tipo) {
@@ -59,7 +89,7 @@ public class SpritePersonaje {
             // Sin suavizado para que los pixeles se vean cuadrados
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                     RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-            g.drawImage(img, x, y, ANCHO * escala, ALTO * escala, null);
+            g.drawImage(img, x, y, ancho(tipo, escala), alto(tipo, escala), null);
             return;
         }
 
@@ -73,11 +103,6 @@ public class SpritePersonaje {
                 pelo = new Color(0xD87820);
                 camisa = new Color(0xF080A0);
                 pantalon = new Color(0x4060B0);
-                break;
-            case "Veterano":
-                pelo = new Color(0xA0A0A0);
-                camisa = new Color(0x409048);
-                pantalon = new Color(0x705030);
                 break;
             default:
                 pelo = new Color(0x604020);

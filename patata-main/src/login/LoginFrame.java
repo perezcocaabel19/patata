@@ -103,20 +103,38 @@ public class LoginFrame extends JFrame {
 
     // Tarjetas con los personajes; se elige con clic
     private static class SelectorPersonaje extends JPanel {
-        private static final String[] NOMBRES = {"Chico", "Chica", "Veterano"};
+        private static final String[] NOMBRES = {"Chico", "Chica"};
+        private static final int ESCALA = 5;
+        private static final int ALTO_TARJETA = 128;
+        private static final int ANCHO_MINIMO = 120;
+        private static final int SEPARACION = 20;
+        private final int[] anchos = new int[NOMBRES.length];
+        private final int[] posiciones = new int[NOMBRES.length];
         private int elegido = 0;
 
         SelectorPersonaje() {
+            int total = 0;
+            for (int i = 0; i < NOMBRES.length; i++) {
+                // El ancho de cada tarjeta depende del ancho real de su sprite
+                anchos[i] = Math.max(ANCHO_MINIMO, SpritePersonaje.ancho(NOMBRES[i], ESCALA) + 40);
+                posiciones[i] = total;
+                total += anchos[i] + SEPARACION;
+            }
+            if (NOMBRES.length > 0) {
+                total -= SEPARACION;
+            }
             setOpaque(false);
-            setPreferredSize(new Dimension(420, 130));
-            setMaximumSize(new Dimension(420, 130));
+            setPreferredSize(new Dimension(total, ALTO_TARJETA));
+            setMaximumSize(new Dimension(total, ALTO_TARJETA));
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    int i = e.getX() / 140;
-                    if (i >= 0 && i < NOMBRES.length) {
-                        elegido = i;
-                        repaint();
+                    for (int i = 0; i < NOMBRES.length; i++) {
+                        if (e.getX() >= posiciones[i] && e.getX() < posiciones[i] + anchos[i]) {
+                            elegido = i;
+                            repaint();
+                            return;
+                        }
                     }
                 }
             });
@@ -129,24 +147,24 @@ public class LoginFrame extends JFrame {
         @Override
         protected void paintComponent(Graphics g0) {
             Graphics2D g = (Graphics2D) g0;
-            int escala = 5;
             for (int i = 0; i < NOMBRES.length; i++) {
-                int x = i * 140;
+                int x = posiciones[i];
+                int anchoTarjeta = anchos[i];
                 g.setColor(EstiloPixel.NEGRO);
-                g.fillRect(x + 10, 0, 120, 128);
+                g.fillRect(x, 0, anchoTarjeta, ALTO_TARJETA);
                 g.setColor(i == elegido ? EstiloPixel.AMARILLO : EstiloPixel.CREMA);
-                g.fillRect(x + 13, 3, 114, 122);
+                g.fillRect(x + 3, 3, anchoTarjeta - 6, ALTO_TARJETA - 6);
                 g.setColor(EstiloPixel.CREMA);
-                g.fillRect(x + 17, 7, 106, 114);
+                g.fillRect(x + 7, 7, anchoTarjeta - 14, ALTO_TARJETA - 14);
 
-                int ancho = SpritePersonaje.ANCHO * escala;
-                SpritePersonaje.dibujar(g, x + 10 + (120 - ancho) / 2, 12, escala, NOMBRES[i]);
+                int ancho = SpritePersonaje.ancho(NOMBRES[i], ESCALA);
+                SpritePersonaje.dibujar(g, x + (anchoTarjeta - ancho) / 2, 12, ESCALA, NOMBRES[i]);
 
                 g.setFont(EstiloPixel.fuente(8f));
                 g.setColor(EstiloPixel.NEGRO);
                 String texto = NOMBRES[i].toUpperCase();
                 int anchoTexto = g.getFontMetrics().stringWidth(texto);
-                g.drawString(texto, x + 10 + (120 - anchoTexto) / 2, 112);
+                g.drawString(texto, x + (anchoTarjeta - anchoTexto) / 2, 112);
             }
         }
     }
