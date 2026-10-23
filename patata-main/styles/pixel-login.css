@@ -1,0 +1,225 @@
+/* ============================================================
+   PIXEL ART - MODAL DE LOGIN (estilo Pokemon)
+   Solo afecta a #login-modal para no tocar el resto del sitio.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('../assets/fonts/PressStart2P-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+#login-modal {
+  background: rgba(8, 12, 16, 0.88);
+  image-rendering: pixelated;
+}
+
+/* Cuadro de dialogo: borde grueso, doble marco y sombra dura */
+#login-modal .login-content {
+  background: #f8f8e0;
+  color: #202020;
+  border: 6px solid #202020;
+  border-radius: 0;
+  box-shadow:
+    0 0 0 4px #3068b0,
+    0 0 0 8px #202020,
+    12px 12px 0 8px rgba(0, 0, 0, 0.45);
+  padding: 24px 22px;
+  width: 480px;
+  max-width: 92vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  scrollbar-width: thin;
+  scrollbar-color: #202020 #f8f8e0;
+}
+
+#login-modal .login-content::-webkit-scrollbar {
+  width: 14px;
+}
+
+#login-modal .login-content::-webkit-scrollbar-track {
+  background: #f8f8e0;
+  border-left: 3px solid #202020;
+}
+
+#login-modal .login-content::-webkit-scrollbar-thumb {
+  background: #3068b0;
+  border: 3px solid #202020;
+}
+
+/* Cabecera del dialogo */
+#login-modal .pixel-header {
+  border-bottom: 4px solid #202020;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+
+#login-modal .login-logo-emoji {
+  font-size: 36px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+#login-modal .pixel-header h2 {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  letter-spacing: 0;
+  color: #e04030;
+  text-shadow: 2px 2px 0 #202020;
+  margin: 0;
+}
+
+#login-modal .pixel-header .subtitulo {
+  font-size: 12px;
+  color: #405060;
+  margin: 8px 0 0;
+  line-height: 1.4;
+}
+
+/* Etiquetas y campo de texto */
+#login-modal .campo {
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+#login-modal .campo label {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 8px;
+  line-height: 1.8;
+  color: #202020;
+  letter-spacing: 0;
+}
+
+#login-modal .campo input {
+  background: #ffffff;
+  border: 4px solid #202020;
+  border-radius: 0;
+  color: #202020;
+  padding: 10px 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  box-shadow: inset 3px 3px 0 rgba(32, 32, 32, 0.12);
+}
+
+#login-modal .campo input:focus {
+  border-color: #3068b0;
+  outline: 3px solid #f8d030;
+  outline-offset: 0;
+}
+
+/* Tarjetas de personaje tipo "elige a tu inicial" */
+#login-modal .selector-personajes-login {
+  gap: 16px;
+  margin: 10px 0;
+}
+
+#login-modal .card-personaje {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  background: #ffffff;
+  border: 4px solid #a0a0a0;
+  border-radius: 0;
+  padding: 12px 8px;
+  color: #202020;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 4px 4px 0 #a0a0a0;
+  transition: transform 0.05s steps(1), box-shadow 0.05s steps(1);
+}
+
+#login-modal .card-personaje:hover {
+  background: #ffffff;
+  border-color: #f8d030;
+  box-shadow: 6px 6px 0 #202020;
+  transform: translate(-2px, -2px);
+}
+
+#login-modal .card-personaje.activo {
+  background: #f8d030;
+  border-color: #202020;
+  color: #202020;
+  box-shadow:
+    inset 0 0 0 3px #ffffff,
+    4px 4px 0 #202020;
+  transform: translate(-2px, -2px);
+}
+
+#login-modal .card-personaje:focus-visible {
+  outline: 4px solid #3068b0;
+  outline-offset: 3px;
+}
+
+#login-modal .card-personaje img {
+  height: 72px;
+  width: auto;
+  display: block;
+  margin: 0 auto 4px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+#login-modal .card-personaje b {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 8px;
+  line-height: 1.6;
+  display: block;
+}
+
+#login-modal .card-personaje small {
+  font-size: 11px;
+  opacity: 0.85;
+  display: block;
+}
+
+/* Botones cuadrados */
+#login-modal .btn-entrar {
+  background: #58b848;
+  color: #ffffff;
+  border: 4px solid #202020;
+  border-radius: 0;
+  padding: 14px 16px;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 10px;
+  line-height: 1.7;
+  letter-spacing: 0;
+  text-shadow: 2px 2px 0 #202020;
+  box-shadow: 5px 5px 0 #202020;
+  transition: transform 0.05s steps(1), box-shadow 0.05s steps(1);
+}
+
+#login-modal .btn-entrar:hover {
+  background: #68c858;
+  transform: translate(-1px, -1px);
+  box-shadow: 7px 7px 0 #202020;
+}
+
+#login-modal .btn-entrar:active {
+  transform: translate(4px, 4px);
+  box-shadow: 1px 1px 0 #202020;
+}
+
+#login-modal .btn-entrar:focus-visible {
+  outline: 4px solid #3068b0;
+  outline-offset: 3px;
+}
+
+#login-modal .nota-personaje {
+  font-size: 11px;
+  color: #405060;
+  font-style: normal;
+  line-height: 1.4;
+  margin-top: 6px;
+}
