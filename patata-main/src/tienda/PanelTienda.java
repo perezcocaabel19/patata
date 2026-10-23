@@ -1,12 +1,16 @@
 package tienda;
 
 import clientes.Cliente;
+import login.LoginFrame;
 import ui.EstiloPixel;
 import ui.SpritePersonaje;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -22,6 +26,7 @@ public class PanelTienda extends JFrame {
     private JList<String> listaCarrito;
     private JLabel lblTotal;
     private JLabel lblDialogo;
+    private JLabel lblPuntos;
     private Timer timerTexto;
 
     public PanelTienda(Cliente cliente, Tienda tienda) {
@@ -40,10 +45,12 @@ public class PanelTienda extends JFrame {
         // Cabecera: personaje + nombre de la tienda + cliente
         EstiloPixel.Caja cabecera = new EstiloPixel.Caja(new BorderLayout(12, 0));
         cabecera.add(new IconoPersonaje(cliente.getPersonaje()), BorderLayout.WEST);
-        JPanel textos = new JPanel(new GridLayout(2, 1, 0, 6));
+        JPanel textos = new JPanel(new GridLayout(3, 1, 0, 6));
         textos.setOpaque(false);
         textos.add(EstiloPixel.etiqueta(tienda.getNombre().toUpperCase(), 16f));
         textos.add(EstiloPixel.etiqueta("CLIENTE: " + cliente.getNombre(), 10f));
+        lblPuntos = EstiloPixel.etiqueta("", 10f);
+        textos.add(lblPuntos);
         cabecera.add(textos, BorderLayout.CENTER);
         fondo.add(cabecera, BorderLayout.NORTH);
 
@@ -58,6 +65,15 @@ public class PanelTienda extends JFrame {
         }
         listaProductos = new JList<>(modeloProductos);
         configurarLista(listaProductos);
+        // Enter agrega el producto seleccionado, igual que el boton AGREGAR
+        listaProductos.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    agregar();
+                }
+            }
+        });
         cajaProductos.add(crearScroll(listaProductos), BorderLayout.CENTER);
         centro.add(cajaProductos);
 
@@ -79,19 +95,22 @@ public class PanelTienda extends JFrame {
         lblDialogo.setVerticalAlignment(SwingConstants.TOP);
         cajaDialogo.add(lblDialogo, BorderLayout.CENTER);
 
-        JPanel botones = new JPanel(new GridLayout(1, 4, 10, 0));
+        JPanel botones = new JPanel(new GridLayout(1, 5, 10, 0));
         botones.setOpaque(false);
         EstiloPixel.Boton btnAgregar = new EstiloPixel.Boton("AGREGAR", EstiloPixel.VERDE);
         EstiloPixel.Boton btnQuitar = new EstiloPixel.Boton("QUITAR", EstiloPixel.AMARILLO);
         EstiloPixel.Boton btnPagar = new EstiloPixel.Boton("PAGAR", EstiloPixel.CELESTE);
+        EstiloPixel.Boton btnCanjes = new EstiloPixel.Boton("CANJES", EstiloPixel.AMARILLO);
         EstiloPixel.Boton btnSalir = new EstiloPixel.Boton("SALIR", EstiloPixel.GRIS);
         btnAgregar.addActionListener(e -> agregar());
         btnQuitar.addActionListener(e -> quitar());
         btnPagar.addActionListener(e -> pagar());
-        btnSalir.addActionListener(e -> dispose());
+        btnCanjes.addActionListener(e -> canjear());
+        btnSalir.addActionListener(e -> salir());
         botones.add(btnAgregar);
         botones.add(btnQuitar);
         botones.add(btnPagar);
+        botones.add(btnCanjes);
         botones.add(btnSalir);
 
         JPanel sur = new JPanel(new BorderLayout(0, 10));
@@ -101,6 +120,7 @@ public class PanelTienda extends JFrame {
         fondo.add(sur, BorderLayout.SOUTH);
 
         setContentPane(fondo);
+        actualizarPuntos();
         decir(tienda.getSaludo());
     }
 
@@ -159,11 +179,18 @@ public class PanelTienda extends JFrame {
         for (Map.Entry<Producto, Integer> e : carrito.entrySet()) {
             e.getKey().restarStock(e.getValue());
         }
+        // Puntos como en la web: 1 punto por cada sol gastado
+        int ganados = (int) Math.round(total);
+        cliente.agregarPuntos(ganados);
         carrito.clear();
         refrescarCarrito();
+        // Refrescar la lista para mostrar el stock actualizado
+        listaProductos.revalidate();
         listaProductos.repaint();
+        actualizarPuntos();
         decir("¡Gracias por tu compra, " + cliente.getNombre() + "! Total pagado: S/ "
-                + String.format(Locale.US, "%.2f", total) + ". ¡Vuelve pronto!");
+                + String.format(Locale.US, "%.2f", total) + ". Ganaste " + ganados
+                + " puntos. Ahora tienes " + cliente.getPuntos() + " puntos.");
     }
 
     private double calcularTotal() {
@@ -172,6 +199,65 @@ public class PanelTienda extends JFrame {
             total += e.getKey().getPrecio() * e.getValue();
         }
         return total;
+    }
+
+    // ---------- Puntos y canjes ----------
+
+    private void actualizarPuntos() {
+        if (lblPuntos != null) {
+            lblPuntos.setText("PUNTOS: " + cliente.getPuntos() + " ⭐");
+        }
+    }
+
+    private void canjear() {
+        List<CanjesPlaza.Premio> premios = CanjesPlaza.listar();
+        if (premios.isEmpty()) {
+            decir("No hay premios disponibles por ahora.");
+            return;
+        }
+        String[] opciones = new String[premios.size()];
+        for (int i = 0; i < premios.size(); i++) {
+            CanjesPlaza.Premio p = premios.get(i);
+            opciones[i] = p.getNombre() + " - " + p.getCostoPuntos() + " pts";
+        }
+        String elegido = (String) JOptionPane.showInputDialog(this,
+                "Tus puntos: " + cliente.getPuntos() + "\nElige el premio que deseas canjear:",
+                "Canjes de la Plaza de Armas",
+                JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
+        if (elegido == null) {
+            return;
+        }
+        int indice = -1;
+        for (int i = 0; i < opciones.length; i++) {
+            if (opciones[i].equals(elegido)) {
+                indice = i;
+                break;
+            }
+        }
+        if (indice < 0) {
+            return;
+        }
+        CanjesPlaza.Premio premio = premios.get(indice);
+        if (cliente.getPuntos() < premio.getCostoPuntos()) {
+            int faltan = premio.getCostoPuntos() - cliente.getPuntos();
+            decir("Te faltan " + faltan + " puntos para canjear " + premio.getNombre() + ".");
+            return;
+        }
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "¿Canjear \"" + premio.getNombre() + "\" por " + premio.getCostoPuntos() + " puntos?",
+                "Confirmar canje", JOptionPane.YES_NO_OPTION);
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
+        cliente.restarPuntos(premio.getCostoPuntos());
+        actualizarPuntos();
+        decir("¡Canjeaste " + premio.getNombre() + "! Te quedan " + cliente.getPuntos() + " puntos.");
+    }
+
+    // SALIR vuelve al login para cambiar de personaje sin cerrar la aplicacion
+    private void salir() {
+        new LoginFrame().setVisible(true);
+        dispose();
     }
 
     private void refrescarCarrito() {

@@ -92,8 +92,21 @@ public class LoginFrame extends JFrame {
         }
 
         String busca = (String) cmbBusca.getSelectedItem();
-        Cliente cliente = new Cliente(nombre, selector.getSeleccion(), busca);
-        RegistroClientes.agregar(cliente);
+        Cliente cliente = null;
+        for (Cliente c : RegistroClientes.listar()) {
+            if (c.getNombre().equalsIgnoreCase(nombre)) {
+                cliente = c;
+                break;
+            }
+        }
+        if (cliente == null) {
+            cliente = new Cliente(nombre, selector.getSeleccion(), busca);
+            RegistroClientes.agregar(cliente);
+        } else {
+            // Al volver al login se conservan los puntos del cliente
+            cliente.setPersonaje(selector.getSeleccion());
+            cliente.setBusca(busca);
+        }
 
         // Por ahora abre la tienda elegida; luego el mapa de tu companero llamara esto
         Tienda tienda = CatalogoTiendas.buscar(busca);
