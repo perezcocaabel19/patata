@@ -1,0 +1,27 @@
+/* ============================================================
+   ESTILOS COMPLEMENTARIOS DE VENTAS - VENTAS GO
+   ============================================================ */
+
+/* Scrollbars personalizados para paneles laterales */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #161b22;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #30363d;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #484f58;
+}
+
+/* Efectos visuales para elementos interactivos */
+.btn-cant:active, .btn-agregar-tienda:active, .btn-canjear:active {
+    transform: scale(0.95);
+}
