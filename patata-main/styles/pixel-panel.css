@@ -42,7 +42,7 @@
 
 #panel-derecho .plaza-panel-header h2 {
   font-size: 12px;
-  color: #f8d030;
+  color: #f0f6fc;
   text-shadow: 2px 2px 0 #202020;
   margin: 8px 0 8px;
 }
@@ -84,7 +84,7 @@
 
 #panel-derecho .tienda-plaza-item:hover {
   background: #1c2430;
-  border-color: #f8d030;
+  border-color: #58b848;
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0 #080b0f;
 }
@@ -106,7 +106,7 @@
 }
 
 #panel-derecho .btn-visitar-tienda {
-  background: #3068b0;
+  background: #238636;
   color: #ffffff;
   border: 3px solid #202020;
   border-radius: 0;
@@ -118,8 +118,8 @@
 }
 
 #panel-derecho .tienda-plaza-item:hover .btn-visitar-tienda {
-  background: #f8d030;
-  color: #10151c;
+  background: #2ea043;
+  color: #ffffff;
   border-color: #202020;
 }
 
@@ -133,7 +133,7 @@
   font-family: 'Press Start 2P', 'Courier New', monospace;
   font-size: 7px;
   line-height: 1.6;
-  color: #f8d030;
+  color: #7ee787;
   background: #202020;
   border: 2px solid #30363d;
   padding: 3px 6px;
@@ -159,8 +159,8 @@
 
 #panel-derecho .canje-card.canje-disponible {
   background: #1b212c;
-  border-color: #f8d030;
-  box-shadow: 4px 4px 0 #080b0f, inset 0 0 0 2px #8a6d10;
+  border-color: #2ea043;
+  box-shadow: 4px 4px 0 #080b0f, inset 0 0 0 2px #1b4d2a;
 }
 
 #panel-derecho .canje-card.canje-bloqueado {
@@ -189,12 +189,12 @@
   font-family: 'Press Start 2P', 'Courier New', monospace;
   font-size: 7px;
   line-height: 1.6;
-  color: #f8d030;
+  color: #7ee787;
 }
 
 #panel-derecho .btn-canjear {
-  background: #f8d030;
-  color: #10151c;
+  background: #238636;
+  color: #ffffff;
   border: 3px solid #202020;
   border-radius: 0;
   box-shadow: 3px 3px 0 #080b0f;
@@ -206,7 +206,7 @@
 }
 
 #panel-derecho .btn-canjear:hover:not(:disabled) {
-  background: #ffe060;
+  background: #2ea043;
   transform: translate(-1px, -1px);
   box-shadow: 4px 4px 0 #080b0f;
 }
@@ -237,7 +237,7 @@
 
 #panel-derecho .tienda-panel-top h2 {
   font-size: 12px;
-  color: #f8d030;
+  color: #f0f6fc;
   text-shadow: 2px 2px 0 #202020;
   margin: 0 0 6px;
 }
@@ -300,8 +300,8 @@
 
 #panel-derecho .btn-cat.activo,
 #panel-derecho .btn-cat:hover {
-  background: #f8d030;
-  color: #10151c;
+  background: #238636;
+  color: #ffffff;
   border-color: #202020;
 }
 
@@ -310,7 +310,7 @@
 #panel-derecho .lista-productos-tienda {
   gap: 10px;
   scrollbar-width: thin;
-  scrollbar-color: #3068b0 #10151c;
+  scrollbar-color: #2ea043 #10151c;
 }
 
 #panel-derecho .lista-productos-tienda::-webkit-scrollbar {
@@ -323,7 +323,7 @@
 }
 
 #panel-derecho .lista-productos-tienda::-webkit-scrollbar-thumb {
-  background: #3068b0;
+  background: #2ea043;
   border: 2px solid #202020;
 }
 
@@ -337,7 +337,7 @@
 
 #panel-derecho .producto-card-tienda:hover {
   background: #1c2430;
-  border-color: #f8d030;
+  border-color: #58b848;
 }
 
 #panel-derecho .prod-tienda-nombre {
@@ -366,7 +366,7 @@
   font-family: 'Press Start 2P', 'Courier New', monospace;
   font-size: 7px;
   line-height: 1.6;
-  color: #f8d030;
+  color: #7ee787;
 }
 
 #panel-derecho .btn-agregar-tienda {
@@ -396,6 +396,6 @@
 /* ---------- Accesibilidad ---------- */
 
 #panel-derecho button:focus-visible {
-  outline: 3px solid #f8d030;
+  outline: 3px solid #7ee787;
   outline-offset: 2px;
 }

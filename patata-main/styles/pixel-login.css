@@ -12,31 +12,74 @@
 }
 
 #login-modal {
-  background: rgba(8, 12, 16, 0.88);
+  background: rgba(13, 17, 23, 0.86);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   image-rendering: pixelated;
 }
 
 /* Cuadro de dialogo: borde grueso, doble marco y sombra dura */
 #login-modal .login-content {
-  background: #f8f8e0;
-  color: #202020;
-  border: 6px solid #202020;
+  --corte-largo: 14px;
+  --corte-corto: 7px;
+  --forma-pixel: polygon(
+    0 var(--corte-largo),
+    var(--corte-corto) var(--corte-largo),
+    var(--corte-corto) var(--corte-corto),
+    var(--corte-largo) var(--corte-corto),
+    var(--corte-largo) 0,
+    calc(100% - var(--corte-largo)) 0,
+    calc(100% - var(--corte-largo)) var(--corte-corto),
+    calc(100% - var(--corte-corto)) var(--corte-corto),
+    calc(100% - var(--corte-corto)) var(--corte-largo),
+    100% var(--corte-largo),
+    100% calc(100% - var(--corte-largo)),
+    calc(100% - var(--corte-corto)) calc(100% - var(--corte-largo)),
+    calc(100% - var(--corte-corto)) calc(100% - var(--corte-corto)),
+    calc(100% - var(--corte-largo)) calc(100% - var(--corte-corto)),
+    calc(100% - var(--corte-largo)) 100%,
+    var(--corte-largo) 100%,
+    var(--corte-largo) calc(100% - var(--corte-corto)),
+    var(--corte-corto) calc(100% - var(--corte-corto)),
+    var(--corte-corto) calc(100% - var(--corte-largo)),
+    0 calc(100% - var(--corte-largo))
+  );
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #161b22;
+  color: #f0f6fc;
+  border: 0;
   border-radius: 0;
-  box-shadow:
-    0 0 0 4px #3068b0,
-    0 0 0 8px #202020,
-    12px 12px 0 8px rgba(0, 0, 0, 0.45);
-  padding: 24px 22px;
+  clip-path: var(--forma-pixel);
+  filter: drop-shadow(8px 8px 0 #0d1117);
+  padding: 24px;
   width: 480px;
   max-width: 92vw;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow: hidden;
   text-align: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 13px;
   line-height: 1.5;
   scrollbar-width: thin;
-  scrollbar-color: #202020 #f8f8e0;
+  scrollbar-color: #30363d #0d1117;
+}
+
+/* Marco pixelado que sigue la forma escalonada del cuadro */
+#login-modal .login-content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 4px;
+  background: #30363d;
+  clip-path: var(--forma-pixel);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 #login-modal .login-content::-webkit-scrollbar {
@@ -44,26 +87,30 @@
 }
 
 #login-modal .login-content::-webkit-scrollbar-track {
-  background: #f8f8e0;
-  border-left: 3px solid #202020;
+  background: #0d1117;
+  border-left: 3px solid #30363d;
 }
 
 #login-modal .login-content::-webkit-scrollbar-thumb {
-  background: #3068b0;
-  border: 3px solid #202020;
+  background: #30363d;
+  border: 3px solid #0d1117;
 }
 
 /* Cabecera del dialogo */
 #login-modal .pixel-header {
-  border-bottom: 4px solid #202020;
-  padding-bottom: 14px;
-  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+  background: #0d1117;
+  border-bottom: 4px solid #238636;
+  margin: -24px -24px 18px;
+  padding: 20px 20px 14px;
 }
 
 #login-modal .login-logo-emoji {
-  font-size: 36px;
+  font-size: 32px;
   display: block;
   margin-bottom: 8px;
+  filter: drop-shadow(2px 2px 0 #0d1117);
 }
 
 #login-modal .pixel-header h2 {
@@ -71,16 +118,36 @@
   font-size: 12px;
   line-height: 1.8;
   letter-spacing: 0;
-  color: #e04030;
-  text-shadow: 2px 2px 0 #202020;
+  color: #f0f6fc;
+  text-shadow: 3px 3px 0 #0d1117;
   margin: 0;
 }
 
 #login-modal .pixel-header .subtitulo {
   font-size: 12px;
-  color: #405060;
+  color: #8b949e;
   margin: 8px 0 0;
   line-height: 1.4;
+}
+
+/* El formulario hace scroll para que el marco quede siempre visible */
+#login-modal #form-login {
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: 6px;
+}
+
+#login-modal #form-login::-webkit-scrollbar {
+  width: 10px;
+}
+
+#login-modal #form-login::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+#login-modal #form-login::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border: 2px solid #0d1117;
 }
 
 /* Etiquetas y campo de texto */
@@ -90,37 +157,43 @@
 }
 
 #login-modal .campo label {
-  font-family: 'Press Start 2P', 'Courier New', monospace;
-  font-size: 8px;
-  line-height: 1.8;
-  color: #202020;
-  letter-spacing: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #c9d1d9;
+  letter-spacing: 0.5px;
 }
 
 #login-modal .campo input {
-  background: #ffffff;
-  border: 4px solid #202020;
+  background: #0d1117;
+  border: 3px solid #30363d;
   border-radius: 0;
-  color: #202020;
+  color: #f0f6fc;
   padding: 10px 12px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
-  box-shadow: inset 3px 3px 0 rgba(32, 32, 32, 0.12);
+  box-shadow: inset 3px 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+#login-modal .campo input::placeholder {
+  color: #6e7681;
 }
 
 #login-modal .campo input:focus {
-  border-color: #3068b0;
-  outline: 3px solid #f8d030;
-  outline-offset: 0;
+  border-color: #2ea043;
+  outline: 3px solid #7ee787;
+  outline-offset: 2px;
 }
 
 /* Tarjetas de personaje tipo "elige a tu inicial" */
 #login-modal .selector-personajes-login {
-  gap: 16px;
-  margin: 10px 0;
+  gap: 12px;
+  margin: 8px 0;
 }
 
 #login-modal .card-personaje {
+  position: relative;
   appearance: none;
   -webkit-appearance: none;
   display: flex;
@@ -128,37 +201,57 @@
   align-items: center;
   justify-content: flex-start;
   gap: 4px;
-  background: #ffffff;
-  border: 4px solid #a0a0a0;
+  flex: 1;
+  background: #21262d;
+  border: 4px solid #30363d;
   border-radius: 0;
   padding: 12px 8px;
-  color: #202020;
+  color: #c9d1d9;
   font-family: inherit;
   cursor: pointer;
   text-align: center;
-  box-shadow: 4px 4px 0 #a0a0a0;
-  transition: transform 0.05s steps(1), box-shadow 0.05s steps(1);
+  box-shadow: 4px 4px 0 #0d1117;
+  transition:
+    transform 0.08s steps(2, end),
+    box-shadow 0.08s steps(2, end),
+    border-color 0.08s steps(2, end),
+    background 0.08s steps(2, end);
 }
 
 #login-modal .card-personaje:hover {
-  background: #ffffff;
-  border-color: #f8d030;
-  box-shadow: 6px 6px 0 #202020;
-  transform: translate(-2px, -2px);
+  background: #262c36;
+  border-color: #58b848;
+  color: #f0f6fc;
+  transform: translate(-1px, -2px);
+  box-shadow: 5px 6px 0 #0d1117;
 }
 
 #login-modal .card-personaje.activo {
-  background: #f8d030;
-  border-color: #202020;
-  color: #202020;
+  background: #17281d;
+  border-color: #2ea043;
+  color: #f0f6fc;
   box-shadow:
-    inset 0 0 0 3px #ffffff,
-    4px 4px 0 #202020;
-  transform: translate(-2px, -2px);
+    inset 0 0 0 2px #238636,
+    4px 4px 0 #0d1117;
+  transform: translate(-1px, -2px);
+}
+
+/* Cursor pixelado: unico detalle en amarillo */
+#login-modal .card-personaje.activo::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 12px;
+  height: 12px;
+  background: #fbc531;
+  clip-path: polygon(0 0, 100% 50%, 0 100%, 30% 50%);
+  animation: cursor-pixel 0.7s steps(1, end) infinite;
+  pointer-events: none;
 }
 
 #login-modal .card-personaje:focus-visible {
-  outline: 4px solid #3068b0;
+  outline: 3px solid #7ee787;
   outline-offset: 3px;
 }
 
@@ -169,6 +262,10 @@
   margin: 0 auto 4px;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+}
+
+#login-modal .card-personaje.activo img {
+  animation: sprite-sube 0.9s steps(2, end) infinite;
 }
 
 #login-modal .card-personaje b {
@@ -186,40 +283,71 @@
 
 /* Botones cuadrados */
 #login-modal .btn-entrar {
-  background: #58b848;
+  background: #238636;
   color: #ffffff;
-  border: 4px solid #202020;
+  border: 4px solid #0d1117;
   border-radius: 0;
   padding: 14px 16px;
   font-family: 'Press Start 2P', 'Courier New', monospace;
   font-size: 10px;
   line-height: 1.7;
   letter-spacing: 0;
-  text-shadow: 2px 2px 0 #202020;
-  box-shadow: 5px 5px 0 #202020;
-  transition: transform 0.05s steps(1), box-shadow 0.05s steps(1);
+  text-shadow: 2px 2px 0 #0d1117;
+  box-shadow: 5px 5px 0 #0d1117;
+  transition:
+    transform 0.08s steps(2, end),
+    box-shadow 0.08s steps(2, end),
+    background 0.08s steps(2, end);
 }
 
 #login-modal .btn-entrar:hover {
-  background: #68c858;
+  background: #2ea043;
   transform: translate(-1px, -1px);
-  box-shadow: 7px 7px 0 #202020;
+  box-shadow: 6px 6px 0 #0d1117;
 }
 
 #login-modal .btn-entrar:active {
-  transform: translate(4px, 4px);
-  box-shadow: 1px 1px 0 #202020;
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 #0d1117;
 }
 
 #login-modal .btn-entrar:focus-visible {
-  outline: 4px solid #3068b0;
+  outline: 3px solid #7ee787;
   outline-offset: 3px;
 }
 
 #login-modal .nota-personaje {
   font-size: 11px;
-  color: #405060;
+  color: #8b949e;
   font-style: normal;
   line-height: 1.4;
   margin-top: 6px;
+}
+
+@keyframes sprite-sube {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes cursor-pixel {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #login-modal .card-personaje.activo img,
+  #login-modal .card-personaje.activo::after {
+    animation: none;
+  }
 }
