@@ -5,12 +5,79 @@
 let personajeLoginSeleccionado = 0;
 
 // ===============================
+// SESION Y PANTALLA DE TITULO
+// ===============================
+function haySesion() {
+  return Boolean(localStorage.getItem('clienteNombre'));
+}
+
+// Quita cualquier tecla que haya quedado presionada en el motor del juego
+function detenerEntradaJuego() {
+  ['w', 'W', 'a', 'A', 's', 'S', 'd', 'D', 'e', 'E', 'g', 'G',
+    'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].forEach(function (tecla) {
+    window.dispatchEvent(new KeyboardEvent('keyup', { key: tecla }));
+  });
+  window.dispatchEvent(new Event('blur'));
+}
+
+function mostrarPantallaTitulo() {
+  const titulo = document.getElementById('pantalla-titulo');
+  if (titulo) {
+    titulo.classList.remove('hidden');
+  }
+  cerrarModalLogin();
+  detenerEntradaJuego();
+}
+
+function comenzarDesdeTitulo() {
+  const titulo = document.getElementById('pantalla-titulo');
+  if (titulo) {
+    titulo.classList.add('hidden');
+  }
+  abrirModalLogin();
+}
+
+// Solo letras (con tildes y ñ), numeros y espacios, entre 2 y 12 caracteres
+const PATRON_NOMBRE = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 ]{2,12}$/;
+
+function nombreValido(nombre) {
+  return PATRON_NOMBRE.test(nombre);
+}
+
+function mostrarErrorLogin(mensaje) {
+  const error = document.getElementById('login-error');
+  const input = document.getElementById('input-nombre');
+  if (error) {
+    error.textContent = mensaje;
+    error.classList.remove('hidden');
+  }
+  if (input) {
+    input.setAttribute('aria-invalid', 'true');
+    input.focus();
+  }
+}
+
+function ocultarErrorLogin() {
+  const error = document.getElementById('login-error');
+  const input = document.getElementById('input-nombre');
+  if (error) {
+    error.textContent = '';
+    error.classList.add('hidden');
+  }
+  if (input) {
+    input.removeAttribute('aria-invalid');
+  }
+}
+
+// ===============================
 // MODAL DE INICIO DE SESIÓN
 // ===============================
 function abrirModalLogin() {
   const modal = document.getElementById('login-modal');
   if (modal) {
     modal.classList.remove('hidden');
+    ocultarErrorLogin();
+    detenerEntradaJuego();
     const input = document.getElementById('input-nombre');
     if (input) {
       input.value = localStorage.getItem('clienteNombre') || '';
@@ -40,7 +107,13 @@ function iniciarSesion(e) {
   if (e) e.preventDefault();
 
   const input = document.getElementById('input-nombre');
-  const nombre = input && input.value.trim() ? input.value.trim() : 'Visitante';
+  const nombre = input ? input.value.trim() : '';
+
+  if (!nombreValido(nombre)) {
+    mostrarErrorLogin('Escribe entre 2 y 12 letras');
+    return;
+  }
+  ocultarErrorLogin();
 
   // Guardar en localStorage de forma permanente durante la estadía
   localStorage.setItem('clienteNombre', nombre);
@@ -133,6 +206,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }, false);
   }
 
+  // Pantalla de titulo: se comienza con clic o con cualquier tecla
+  const pantallaTitulo = document.getElementById('pantalla-titulo');
+  if (pantallaTitulo) {
+    pantallaTitulo.addEventListener('click', comenzarDesdeTitulo);
+  }
+  window.addEventListener('keydown', function (e) {
+    const titulo = document.getElementById('pantalla-titulo');
+    if (!titulo || titulo.classList.contains('hidden')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    comenzarDesdeTitulo();
+  }, true);
+
+  const inputNombre = document.getElementById('input-nombre');
+  if (inputNombre) {
+    inputNombre.addEventListener('input', ocultarErrorLogin);
+  }
+
   // Asignar eventos de clic a todos los triggers de tiendas sobre el mapa
   document.querySelectorAll('.shop-trigger').forEach(function (boton) {
     boton.addEventListener('click', function () {
@@ -159,9 +250,13 @@ document.addEventListener('DOMContentLoaded', function () {
       window.Juego.cambiarPersonaje(idx);
     }
     cerrarModalLogin();
+    const titulo = document.getElementById('pantalla-titulo');
+    if (titulo) {
+      titulo.classList.add('hidden');
+    }
   } else {
-    // Si no ha iniciado, mostrar obligatoriamente el selector de personaje y nombre
-    abrirModalLogin();
+    // Sin sesion guardada se muestra la pantalla de titulo antes del login
+    mostrarPantallaTitulo();
   }
 
   // Renderizar la Plaza en el panel derecho por defecto

@@ -132,6 +132,15 @@
 
   </main>
 
+  <!-- Pantalla de titulo inicial (solo cuando no hay sesion guardada) -->
+  <div id="pantalla-titulo" class="pantalla-titulo hidden" role="button" tabindex="0" aria-label="Comenzar">
+    <div class="titulo-marco">
+      <h1>VENTAS GO</h1>
+      <p class="titulo-sub">PLAZA DE ARMAS DE HUACHO</p>
+      <p class="titulo-empezar">PRESIONA PARA COMENZAR</p>
+    </div>
+  </div>
+
   <!-- Modal de Login y Selección de Personajes (Al iniciar o al salir) -->
   <div id="login-modal" class="modal hidden">
     <div class="modal-content login-content">
@@ -144,7 +153,8 @@
       <form id="form-login" onsubmit="iniciarSesion(event)">
         <div class="campo">
           <label for="input-nombre">TU NOMBRE DE JUGADOR:</label>
-          <input type="text" id="input-nombre" placeholder="Escribe tu nombre..." required autofocus maxlength="20">
+          <input type="text" id="input-nombre" placeholder="Escribe tu nombre..." aria-required="true" autofocus maxlength="12">
+          <div id="login-error" class="login-error hidden" role="alert" aria-live="polite"></div>
         </div>
 
         <div class="campo">
