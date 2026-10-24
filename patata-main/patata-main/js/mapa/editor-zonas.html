@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editor de zona caminable - Ventas GO</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 16px;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #1e272e; color: #dcdde1;
+    }
+    h1 { font-size: 18px; margin: 0 0 4px; color: #fbc531; }
+    .sub { font-size: 13px; color: #9aa4ad; margin-bottom: 12px; }
+    .layout { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+    .lienzo-wrap { position: relative; border: 3px solid #fbc531; border-radius: 10px; overflow: hidden; background: #000; }
+    canvas#lienzo { display: block; width: 850px; max-width: 92vw; height: auto; cursor: crosshair; }
+    .panel {
+      width: 300px; display: flex; flex-direction: column; gap: 12px;
+      background: #2f3640; padding: 14px; border-radius: 10px; font-size: 13px;
+    }
+    .panel h2 { font-size: 13px; margin: 0; color: #fbc531; text-transform: uppercase; letter-spacing: 1px; }
+    .fila { display: flex; gap: 6px; flex-wrap: wrap; }
+    button {
+      background: #485460; color: #fff; border: 2px solid #5d6a76;
+      padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;
+    }
+    button:hover { background: #57646f; }
+    button.activo { background: #fbc531; color: #1e272e; border-color: #e1b12c; }
+    button.principal { background: #44bd32; border-color: #3aa32a; }
+    button.peligro { background: #c23616; border-color: #a52a0f; }
+    label { display: flex; align-items: center; gap: 8px; }
+    input[type=range] { flex: 1; }
+    .valor { font-family: Consolas, monospace; min-width: 42px; text-align: right; }
+    .stats { font-family: Consolas, monospace; font-size: 12px; color: #9aa4ad; line-height: 1.6; }
+    .aviso {
+      background: #4a2f00; border: 1px solid #fbc531; color: #fbc531;
+      padding: 10px; border-radius: 8px; font-size: 12px; display: none;
+    }
+    .aviso.visible { display: block; }
+    ol { margin: 6px 0 0 16px; padding: 0; line-height: 1.7; }
+    a { color: #fbc531; }
+  </style>
+</head>
+<body>
+
+  <h1>Editor de zona caminable</h1>
+  <div class="sub">Marca dónde puede caminar el personaje. Al final exporta <code>zonas.js</code> y reemplaza el del proyecto.</div>
+
+  <div class="aviso" id="aviso">
+    No pude leer los pixeles del mapa. Abre esta página con <b>servidor.bat</b>
+    (http://localhost:8000/js/mapa/editor-zonas.html) en vez de hacer doble clic en el archivo.
+  </div>
+
+  <div class="layout">
+    <div class="lienzo-wrap">
+      <canvas id="lienzo"></canvas>
+    </div>
+
+    <div class="panel">
+      <div>
+        <h2>1. Herramienta</h2>
+        <div class="fila" style="margin-top:6px">
+          <button data-tool="varita" class="activo">Varita (clic)</button>
+          <button data-tool="pintar">Pincel</button>
+          <button data-tool="borrar">Borrar</button>
+        </div>
+      </div>
+
+      <div>
+        <label>Tolerancia <input type="range" id="tol" min="4" max="120" value="38"><span class="valor" id="tol-val">38</span></label>
+        <label>Grosor <input type="range" id="grosor" min="1" max="20" value="5"><span class="valor" id="grosor-val">5</span></label>
+      </div>
+
+      <div>
+        <h2>2. Acciones</h2>
+        <div class="fila" style="margin-top:6px">
+          <button id="deshacer">Deshacer</button>
+          <button id="limpiar" class="peligro">Limpiar</button>
+          <button id="invertir">Invertir</button>
+        </div>
+        <label style="margin-top:8px">
+          <input type="checkbox" id="ver-mascara" checked> Ver máscara verde
+        </label>
+      </div>
+
+      <div class="stats" id="stats">caminable: 0%</div>
+
+      <div>
+        <h2>3. Exportar</h2>
+        <div class="fila" style="margin-top:6px">
+          <button id="exportar" class="principal">Descargar zonas.js</button>
+          <button id="copiar">Copiar</button>
+        </div>
+        <div class="stats" id="estado-copia" style="margin-top:6px"></div>
+      </div>
+
+      <div>
+        <h2>Cómo usarlo</h2>
+        <ol>
+          <li>Elige <b>Varita</b>.</li>
+          <li>Haz clic en una calle o vereda del mapa: se pintará todo el suelo parecido.</li>
+          <li>Si se pinta de más, baja la <b>tolerancia</b> y vuelve a hacer clic.</li>
+          <li>Repite en cada zona caminable (calles, plaza...).</li>
+          <li>Pule los bordes con <b>Pincel</b> / <b>Borrar</b>.</li>
+          <li>Pulsa <b>Descargar zonas.js</b> y reemplaza <code>js/mapa/zonas.js</code>.</li>
+        </ol>
+        <div style="margin-top:8px"><a href="../../index.html">← Volver al juego</a></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    const MW = 344;      // ancho de la mascara (celdas)
+    const MH = 192;      // alto de la mascara
+    const RUTA_MAPA = '../../assets/MAPA2D/MAPA.jpg';
+    const CLAVE = 'ventasgo_zona_caminable';
+
+    const lienzo = document.getElementById('lienzo');
+    const ctx = lienzo.getContext('2d');
+    const aviso = document.getElementById('aviso');
+
+    const mapa = new Image();
+    const mapaMini = document.createElement('canvas');
+    mapaMini.width = MW;
+    mapaMini.height = MH;
+    const miniCtx = mapaMini.getContext('2d', { willReadFrequently: true });
+
+    const capaMascara = document.createElement('canvas');
+    capaMascara.width = MW;
+    capaMascara.height = MH;
+    const mascaraCtx = capaMascara.getContext('2d');
+
+    const mascara = new Uint8Array(MW * MH);
+    const historial = [];
+    let pixeles = null;      // ImageData del mapa reducido
+    let herramienta = 'varita';
+    let dibujando = false;
+
+    const tol = document.getElementById('tol');
+    const tolVal = document.getElementById('tol-val');
+    const grosor = document.getElementById('grosor');
+    const grosorVal = document.getElementById('grosor-val');
+    const verMascara = document.getElementById('ver-mascara');
+    const stats = document.getElementById('stats');
+    const estadoCopia = document.getElementById('estado-copia');
+
+    function leerPixeles() {
+      try {
+        pixeles = miniCtx.getImageData(0, 0, MW, MH);
+        aviso.classList.remove('visible');
+        return true;
+      } catch (e) {
+        aviso.classList.add('visible');
+        return false;
+      }
+    }
+
+    function cargarDesdeStorage() {
+      try {
+        const guardado = localStorage.getItem(CLAVE);
+        if (!guardado) return;
+        const obj = JSON.parse(guardado);
+        if (obj.ancho !== MW || obj.alto !== MH) return;
+        const bin = atob(obj.datos);
+        for (let i = 0; i < mascara.length; i++) {
+          mascara[i] = (bin.charCodeAt(i >> 3) >> (i & 7)) & 1;
+        }
+      } catch (e) { /* ignorar */ }
+    }
+
+    function guardarEnStorage() {
+      try {
+        localStorage.setItem(CLAVE, JSON.stringify({ ancho: MW, alto: MH, datos: empaquetar() }));
+      } catch (e) { /* ignorar */ }
+    }
+
+    function empaquetar() {
+      const bytes = new Uint8Array(Math.ceil(mascara.length / 8));
+      for (let i = 0; i < mascara.length; i++) {
+        if (mascara[i]) bytes[i >> 3] |= 1 << (i & 7);
+      }
+      let bin = '';
+      const TROZO = 0x8000;
+      for (let i = 0; i < bytes.length; i += TROZO) {
+        bin += String.fromCharCode.apply(null, bytes.subarray(i, i + TROZO));
+      }
+      return btoa(bin);
+    }
+
+    function snapshot() {
+      historial.push(mascara.slice());
+      if (historial.length > 25) historial.shift();
+    }
+
+    // ---------- dibujo ----------
+
+    function pintarMascara() {
+      const img = mascaraCtx.createImageData(MW, MH);
+      for (let i = 0; i < mascara.length; i++) {
+        if (mascara[i]) {
+          img.data[i * 4] = 60;
+          img.data[i * 4 + 1] = 220;
+          img.data[i * 4 + 2] = 120;
+          img.data[i * 4 + 3] = 120;
+        }
+      }
+      mascaraCtx.putImageData(img, 0, 0);
+    }
+
+    let pendiente = false;
+    function refrescar() {
+      if (pendiente) return;
+      pendiente = true;
+      requestAnimationFrame(function () {
+        pendiente = false;
+        ctx.drawImage(mapa, 0, 0, lienzo.width, lienzo.height);
+        if (verMascara.checked) {
+          pintarMascara();
+          ctx.imageSmoothingEnabled = false;
+          ctx.drawImage(capaMascara, 0, 0, lienzo.width, lienzo.height);
+        }
+        let n = 0;
+        for (let i = 0; i < mascara.length; i++) if (mascara[i]) n++;
+        stats.textContent = 'caminable: ' + (100 * n / mascara.length).toFixed(1) + '%   |   celdas: ' + n + '/' + mascara.length;
+        guardarEnStorage();
+      });
+    }
+
+    // ---------- coordenadas ----------
+
+    function celdaDesdeEvento(ev) {
+      const r = lienzo.getBoundingClientRect();
+      const x = (ev.clientX - r.left) / r.width;
+      const y = (ev.clientY - r.top) / r.height;
+      return {
+        cx: Math.min(MW - 1, Math.max(0, Math.floor(x * MW))),
+        cy: Math.min(MH - 1, Math.max(0, Math.floor(y * MH))),
+      };
+    }
+
+    // ---------- herramientas ----------
+
+    function varita(inicioCx, inicioCy) {
+      if (!pixeles) return;
+      const d = pixeles.data;
+      const base = (inicioCy * MW + inicioCx) * 4;
+      const r0 = d[base], g0 = d[base + 1], b0 = d[base + 2];
+      const limite = Number(tol.value) * 2.2;
+
+      const visitado = new Uint8Array(MW * MH);
+      const cola = [inicioCy * MW + inicioCx];
+      visitado[cola[0]] = 1;
+
+      while (cola.length) {
+        const i = cola.pop();
+        const px = i % MW;
+        const py = (i - px) / MW;
+        const o = i * 4;
+        const dr = d[o] - r0;
+        const dg = d[o + 1] - g0;
+        const db = d[o + 2] - b0;
+        if (Math.sqrt(dr * dr + dg * dg + db * db) > limite) continue;
+
+        mascara[i] = 1;
+
+        if (px > 0 && !visitado[i - 1]) { visitado[i - 1] = 1; cola.push(i - 1); }
+        if (px < MW - 1 && !visitado[i + 1]) { visitado[i + 1] = 1; cola.push(i + 1); }
+        if (py > 0 && !visitado[i - MW]) { visitado[i - MW] = 1; cola.push(i - MW); }
+        if (py < MH - 1 && !visitado[i + MW]) { visitado[i + MW] = 1; cola.push(i + MW); }
+      }
+    }
+
+    function pincel(cx, cy, valor) {
+      const r = Number(grosor.value);
+      for (let y = cy - r; y <= cy + r; y++) {
+        for (let x = cx - r; x <= cx + r; x++) {
+          if (x < 0 || y < 0 || x >= MW || y >= MH) continue;
+          const dx = x - cx;
+          const dy = y - cy;
+          if (dx * dx + dy * dy <= r * r) mascara[y * MW + x] = valor;
+        }
+      }
+    }
+
+    // ---------- eventos ----------
+
+    lienzo.addEventListener('mousedown', function (ev) {
+      const c = celdaDesdeEvento(ev);
+      snapshot();
+      if (herramienta === 'varita') {
+        varita(c.cx, c.cy);
+      } else {
+        dibujando = true;
+        pincel(c.cx, c.cy, herramienta === 'pintar' ? 1 : 0);
+      }
+      refrescar();
+    });
+
+    lienzo.addEventListener('mousemove', function (ev) {
+      if (!dibujando || herramienta === 'varita') return;
+      const c = celdaDesdeEvento(ev);
+      pincel(c.cx, c.cy, herramienta === 'pintar' ? 1 : 0);
+      refrescar();
+    });
+
+    window.addEventListener('mouseup', function () { dibujando = false; });
+
+    document.querySelectorAll('[data-tool]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        herramienta = b.dataset.tool;
+        document.querySelectorAll('[data-tool]').forEach(function (o) {
+          o.classList.toggle('activo', o === b);
+        });
+      });
+    });
+
+    tol.addEventListener('input', function () { tolVal.textContent = tol.value; });
+    grosor.addEventListener('input', function () { grosorVal.textContent = grosor.value; });
+    verMascara.addEventListener('change', refrescar);
+
+    document.getElementById('deshacer').addEventListener('click', function () {
+      if (!historial.length) return;
+      mascara.set(historial.pop());
+      refrescar();
+    });
+
+    document.getElementById('limpiar').addEventListener('click', function () {
+      snapshot();
+      mascara.fill(0);
+      refrescar();
+    });
+
+    document.getElementById('invertir').addEventListener('click', function () {
+      snapshot();
+      for (let i = 0; i < mascara.length; i++) mascara[i] = mascara[i] ? 0 : 1;
+      refrescar();
+    });
+
+    function contenidoArchivo() {
+      const datos = empaquetar();
+      return '// Archivo generado por js/mapa/editor-zonas.html\n' +
+        '// Zona caminable del mapa (1 = se puede caminar).\n\n' +
+        'const ZONA_CAMINABLE = {\n' +
+        '  ancho: ' + MW + ',\n' +
+        '  alto: ' + MH + ',\n' +
+        "  datos: '" + datos + "',\n" +
+        '};\n';
+    }
+
+    document.getElementById('exportar').addEventListener('click', function () {
+      const blob = new Blob([contenidoArchivo()], { type: 'text/javascript' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'zonas.js';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      estadoCopia.textContent = 'Descargado. Reemplaza js/mapa/zonas.js con ese archivo.';
+    });
+
+    document.getElementById('copiar').addEventListener('click', function () {
+      navigator.clipboard.writeText(contenidoArchivo()).then(function () {
+        estadoCopia.textContent = 'Copiado al portapapeles (pegalo en js/mapa/zonas.js).';
+      }).catch(function () {
+        estadoCopia.textContent = 'No se pudo copiar. Usa Descargar.';
+      });
+    });
+
+    // ---------- arranque ----------
+
+    mapa.onload = function () {
+      lienzo.width = mapa.naturalWidth;
+      lienzo.height = mapa.naturalHeight;
+      miniCtx.drawImage(mapa, 0, 0, MW, MH);
+      leerPixeles();
+      cargarDesdeStorage();
+      refrescar();
+    };
+    mapa.onerror = function () {
+      ctx.fillStyle = '#fff';
+      ctx.font = '20px sans-serif';
+      ctx.fillText('No se pudo cargar el mapa', 40, 60);
+    };
+    mapa.src = RUTA_MAPA;
+  })();
+  </script>
+</body>
+</html>
