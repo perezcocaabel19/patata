@@ -1,0 +1,1122 @@
+/* ============================================================
+   ESTILOS GENERALES - VENTAS GO PLAZA DE ARMAS DE HUACHO
+   ============================================================ */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #161b22;
+  color: #e6edf3;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   HEADER SUPERIOR
+   ============================================================ */
+.header-principal {
+  background: #0d1117;
+  border-bottom: 2px solid #30363d;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.logo-titulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-emoji {
+  font-size: 28px;
+}
+
+.logo-titulo h1 {
+  font-size: 18px;
+  margin: 0;
+  color: #fbc531;
+  letter-spacing: 0.5px;
+}
+
+.subtitulo-header {
+  font-size: 11px;
+  color: #8b949e;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.info-jugador-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.dato-usuario {
+  background: #21262d;
+  border: 1px solid #30363d;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #c9d1d9;
+}
+
+.dato-usuario b {
+  color: #fbc531;
+}
+
+.puntos-usuario {
+  background: #e3b341;
+  color: #0d1117;
+  font-weight: bold;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  box-shadow: 0 2px 8px rgba(227, 179, 65, 0.3);
+}
+
+.btn-salir-header {
+  background: #21262d;
+  color: #f85149;
+  border: 1px solid #30363d;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-salir-header:hover {
+  background: #b62324;
+  color: #fff;
+  border-color: #b62324;
+}
+
+/* ============================================================
+   LAYOUT PRINCIPAL DE 3 COLUMNAS
+   ============================================================ */
+.app-layout {
+  display: flex;
+  gap: 16px;
+  padding: 14px 18px;
+  max-width: 1680px;
+  margin: 0 auto;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* Paneles laterales (Izquierdo y Derecho) */
+.panel-lateral {
+  background: #21262d;
+  border: 2px solid #30363d;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================================
+   COLUMNA IZQUIERDA: CARRITO DE COMPRAS
+   ============================================================ */
+#panel-izquierdo {
+  width: 320px;
+  min-width: 300px;
+  position: sticky;
+  top: 14px;
+  max-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #30363d;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.cabecera-con-icono {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-icono {
+  font-size: 24px;
+}
+
+.panel-cabecera h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #fbc531;
+}
+
+.panel-sub {
+  font-size: 11px;
+  color: #8b949e;
+}
+
+.badge-puntos-acumulados {
+  background: #30363d;
+  border: 1px solid #484f58;
+  color: #fbc531;
+  font-weight: bold;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.lista-carrito-scroll {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 48vh;
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Item dentro del carrito */
+.item-carrito-izq {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 10px;
+  transition: border-color 0.2s;
+}
+
+.item-carrito-izq:hover {
+  border-color: #484f58;
+}
+
+.item-izq-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.item-izq-nombre {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f0f6fc;
+}
+
+.btn-eliminar-item {
+  background: transparent;
+  color: #8b949e;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.btn-eliminar-item:hover {
+  color: #f85149;
+}
+
+.item-izq-tienda {
+  font-size: 11px;
+  color: #8b949e;
+  margin: 3px 0 6px;
+}
+
+.item-izq-detalles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.item-izq-precio {
+  font-size: 12px;
+  color: #e3b341;
+  font-weight: bold;
+}
+
+.controles-cantidad-izq {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-cant {
+  background: #30363d;
+  color: #f0f6fc;
+  border: 1px solid #484f58;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.btn-cant:hover {
+  background: #484f58;
+}
+
+.cant-num {
+  font-size: 13px;
+  font-weight: bold;
+  min-width: 18px;
+  text-align: center;
+}
+
+.item-izq-subtotal {
+  font-size: 12px;
+  color: #7ee787;
+  font-weight: 600;
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* Estado vacío del carrito */
+.carrito-vacio-box {
+  text-align: center;
+  padding: 30px 10px;
+  color: #8b949e;
+}
+
+.icono-vacio {
+  font-size: 36px;
+  display: block;
+  margin-bottom: 8px;
+  opacity: 0.6;
+}
+
+.vacio-titulo {
+  font-weight: bold;
+  color: #c9d1d9;
+  margin: 0 0 6px;
+}
+
+.vacio-desc {
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Resumen del carrito */
+.carrito-resumen {
+  border-top: 2px solid #30363d;
+  padding-top: 12px;
+  margin-top: 12px;
+}
+
+.fila-resumen {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #8b949e;
+  margin-bottom: 6px;
+}
+
+.puntos-ganar {
+  color: #e3b341;
+}
+
+.fila-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #f0f6fc;
+  margin: 8px 0 12px;
+}
+
+.monto-total {
+  font-size: 20px;
+  color: #7ee787;
+}
+
+.btn-pagar-pedido {
+  background: #238636;
+  color: #ffffff;
+  border: 1px solid rgba(240, 246, 252, 0.1);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s;
+  box-shadow: 0 2px 6px rgba(35, 134, 54, 0.4);
+}
+
+.btn-pagar-pedido:hover {
+  background: #2ea043;
+}
+
+.btn-vaciar-carrito {
+  background: transparent;
+  color: #8b949e;
+  border: none;
+  font-size: 11px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 8px;
+  padding: 4px;
+}
+
+.btn-vaciar-carrito:hover {
+  color: #f85149;
+  text-decoration: underline;
+}
+
+/* ============================================================
+   COLUMNA CENTRAL: MAPA 2D INTERACTIVO
+   ============================================================ */
+#panel-central {
+  flex: 1;
+  max-width: 900px;
+  min-width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.barra-mapa {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #8b949e;
+  margin-bottom: 8px;
+  background: #21262d;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #30363d;
+}
+
+.ayuda-teclas {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ayuda-teclas b {
+  color: #fbc531;
+}
+
+.indicador-posicion {
+  font-family: Consolas, monospace;
+  color: #a5d6ff;
+  font-size: 11px;
+}
+
+/* Contenedor del Juego: misma proporción que MAPA.jpg (2752 x 1536) */
+#game-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2752 / 1536;
+  border: 3px solid #fbc531;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  background: #000;
+  touch-action: none;
+}
+
+#game-map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  z-index: 1;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+#player {
+  position: absolute;
+  left: 50%;
+  top: 66%;
+  transform: translate(-50%, -100%);
+  z-index: 10;
+  pointer-events: none;
+  will-change: left, top;
+}
+
+#player-sprite {
+  display: block;
+  height: 44px; /* Lo ajusta dinamicamente juego.js con CONFIG.altoSprites */
+  width: auto;
+  transform-origin: center bottom;
+  user-select: none;
+  -webkit-user-drag: none;
+  image-rendering: pixelated;
+}
+
+#capa-debug {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* Botones sobre las tiendas reales del mapa */
+.shop-trigger {
+  position: absolute;
+  width: 5.5%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: rgba(251, 197, 49, 0.2);
+  border: 2px dashed #fbc531;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 5;
+  padding: 0;
+  transition: all 0.2s ease;
+  animation: pulsoTienda 2s infinite ease-in-out;
+}
+
+@keyframes pulsoTienda {
+  0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; }
+  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; }
+}
+
+.shop-trigger:hover {
+  background: rgba(251, 197, 49, 0.6);
+  border-color: #ffffff;
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+#pista-tienda {
+  position: absolute;
+  left: 50%;
+  bottom: 5%;
+  transform: translateX(-50%);
+  background: rgba(13, 17, 23, 0.9);
+  border: 2px solid #fbc531;
+  color: #fbc531;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 7px 16px;
+  border-radius: 8px;
+  z-index: 30;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+#pista-tienda.visible {
+  opacity: 1;
+}
+
+#hud {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 30;
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  color: #fff;
+  background: rgba(13, 17, 23, 0.75);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #30363d;
+  pointer-events: none;
+}
+
+.pie-mapa {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #8b949e;
+  text-align: center;
+}
+
+/* ============================================================
+   COLUMNA DERECHA: PLAZA DE ARMAS / TIENDA ACTIVA
+   ============================================================ */
+#panel-derecho {
+  width: 360px;
+  min-width: 320px;
+  position: sticky;
+  top: 14px;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#panel-derecho-contenido {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Cabecera de la Plaza */
+.plaza-panel-header {
+  border-bottom: 2px solid #30363d;
+  padding-bottom: 12px;
+}
+
+.plaza-badge {
+  background: #238636;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.plaza-panel-header h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  color: #fbc531;
+}
+
+.plaza-subtitulo {
+  font-size: 12px;
+  color: #8b949e;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.titulo-seccion {
+  font-size: 13px;
+  color: #f0f6fc;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.texto-ayuda {
+  font-size: 11px;
+  color: #8b949e;
+  margin: 0 0 8px;
+}
+
+/* Lista de tiendas en la Plaza (sin revelar inventario) */
+.lista-tiendas-plaza {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tienda-plaza-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tienda-plaza-item:hover {
+  background: #262c36;
+  border-color: #fbc531;
+  transform: translateX(4px);
+}
+
+.tienda-plaza-icono {
+  font-size: 20px;
+}
+
+.tienda-plaza-info {
+  flex: 1;
+}
+
+.tienda-plaza-info h4 {
+  margin: 0;
+  font-size: 13px;
+  color: #f0f6fc;
+}
+
+.tienda-plaza-hint {
+  font-size: 10px;
+  color: #8b949e;
+  display: block;
+}
+
+.btn-visitar-tienda {
+  background: #30363d;
+  color: #f0f6fc;
+  border: 1px solid #484f58;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tienda-plaza-item:hover .btn-visitar-tienda {
+  background: #fbc531;
+  color: #0d1117;
+  border-color: #fbc531;
+}
+
+/* Canjes de la Plaza con Puntos */
+.canjes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.badge-mis-puntos {
+  font-size: 11px;
+  color: #e3b341;
+}
+
+.badge-mis-puntos b {
+  font-size: 13px;
+}
+
+.lista-canjes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.canje-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.canje-card.canje-disponible {
+  border-color: #e3b341;
+  background: #1b212c;
+}
+
+.canje-icono {
+  font-size: 24px;
+}
+
+.canje-info {
+  flex: 1;
+}
+
+.canje-info h5 {
+  margin: 0;
+  font-size: 12px;
+  color: #f0f6fc;
+}
+
+.canje-info p {
+  margin: 2px 0 4px;
+  font-size: 10px;
+  color: #8b949e;
+}
+
+.canje-costo {
+  font-size: 11px;
+  font-weight: bold;
+  color: #e3b341;
+}
+
+.btn-canjear {
+  background: #e3b341;
+  color: #0d1117;
+  border: none;
+  font-weight: bold;
+  font-size: 11px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-canjear:hover:not(:disabled) {
+  background: #fbc531;
+  transform: scale(1.05);
+}
+
+.btn-canjear:disabled {
+  background: #30363d;
+  color: #6e7681;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   VISTA DE TIENDA ACTIVA (DENTRO DEL PANEL DERECHO)
+   ============================================================ */
+.tienda-panel-header {
+  border-bottom: 2px solid #30363d;
+  padding-bottom: 12px;
+}
+
+.tienda-panel-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.tienda-icono-badge {
+  font-size: 28px;
+}
+
+.tienda-panel-top h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #fbc531;
+}
+
+.tienda-estado-badge {
+  font-size: 10px;
+  color: #7ee787;
+  font-weight: 600;
+}
+
+.tienda-panel-desc {
+  font-size: 12px;
+  color: #8b949e;
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+
+.btn-salir-plaza {
+  background: #30363d;
+  color: #f0f6fc;
+  border: 1px solid #484f58;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.btn-salir-plaza:hover {
+  background: #238636;
+  border-color: #238636;
+}
+
+.btn-salir-plaza.secundario {
+  margin-top: 10px;
+}
+
+/* Filtros de categoría de tienda */
+.tienda-filtros {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.btn-cat {
+  background: #161b22;
+  color: #8b949e;
+  border: 1px solid #30363d;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-cat.activo, .btn-cat:hover {
+  background: #fbc531;
+  color: #0d1117;
+  border-color: #fbc531;
+}
+
+/* Lista de productos de la tienda */
+.lista-productos-tienda {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 55vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.producto-card-tienda {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 10px 12px;
+  transition: all 0.2s;
+}
+
+.producto-card-tienda:hover {
+  border-color: #fbc531;
+  background: #1c222b;
+}
+
+.prod-tienda-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.prod-tienda-nombre {
+  font-size: 13px;
+  font-weight: bold;
+  color: #f0f6fc;
+}
+
+.prod-tienda-precio {
+  font-size: 13px;
+  font-weight: bold;
+  color: #7ee787;
+  white-space: nowrap;
+}
+
+.prod-tienda-desc {
+  font-size: 11px;
+  color: #8b949e;
+  margin: 4px 0 8px;
+  line-height: 1.3;
+}
+
+.prod-tienda-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.prod-tienda-puntos {
+  font-size: 11px;
+  color: #e3b341;
+  font-weight: 600;
+}
+
+.btn-agregar-tienda {
+  background: #238636;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-agregar-tienda:hover {
+  background: #2ea043;
+}
+
+/* ============================================================
+   MODAL DE LOGIN / INICIO
+   ============================================================ */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.login-content {
+  background: #161b22;
+  border: 3px solid #fbc531;
+  border-radius: 12px;
+  padding: 26px;
+  width: 440px;
+  max-width: 95vw;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  text-align: center;
+}
+
+.pixel-header {
+  margin-bottom: 18px;
+  border-bottom: 2px dashed #30363d;
+  padding-bottom: 12px;
+}
+
+.login-logo-emoji {
+  font-size: 38px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.pixel-header h2 {
+  font-size: 18px;
+  color: #fbc531;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.pixel-header .subtitulo {
+  font-size: 12px;
+  color: #8b949e;
+  margin: 4px 0 0;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.campo label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #fbc531;
+  letter-spacing: 0.5px;
+}
+
+.campo input {
+  background: #0d1117;
+  border: 2px solid #30363d;
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+.campo input:focus {
+  border-color: #fbc531;
+}
+
+.selector-personajes-login {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.card-personaje {
+  flex: 1;
+  background: #21262d;
+  border: 3px solid #30363d;
+  border-radius: 8px;
+  padding: 12px 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  color: #c9d1d9;
+}
+
+.card-personaje:hover {
+  border-color: #fbc531;
+  background: #262c36;
+}
+
+.card-personaje.activo {
+  border-color: #fbc531;
+  background: #fbc531;
+  color: #0d1117;
+}
+
+.card-personaje img {
+  height: 60px;
+  width: auto;
+  display: block;
+  margin: 0 auto 6px;
+  image-rendering: pixelated;
+}
+
+.card-personaje b {
+  display: block;
+  font-size: 12px;
+}
+
+.card-personaje small {
+  display: block;
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.nota-personaje {
+  display: block;
+  font-size: 11px;
+  color: #8b949e;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.btn-entrar {
+  background: #fbc531;
+  color: #0d1117;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  letter-spacing: 0.5px;
+  transition: background 0.2s;
+}
+
+.btn-entrar:hover {
+  background: #e3b341;
+}
+
+/* Toast flotante */
+#toast-mensaje {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #238636;
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.25s ease;
+  pointer-events: none;
+}
+
+#toast-mensaje.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   RESPONSIVIDAD
+   ============================================================ */
+@media (max-width: 1200px) {
+  .app-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+  #panel-izquierdo, #panel-derecho, #panel-central {
+    width: 100%;
+    max-width: 850px;
+    position: static;
+    max-height: none;
+  }
+}
