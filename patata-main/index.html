@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plaza de Armas de Huacho - Ventas GO</title>
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="css/ventas.css">
+  <link rel="stylesheet" href="styles/pixel-login.css">
+  <link rel="stylesheet" href="styles/pixel-panel.css">
+</head>
+<body>
+  <!-- Barra de estado superior -->
+  <header class="header-principal">
+    <div class="logo-titulo">
+      <span class="logo-emoji">🏛️</span>
+      <div>
+        <h1>Plaza de Armas de Huacho</h1>
+        <span class="subtitulo-header">Sistema de Ventas GO</span>
+      </div>
+    </div>
+
+    <div class="info-jugador-header">
+      <div class="dato-usuario">
+        👤 <b id="barra-cliente-nombre">Invitado</b> (<span id="barra-personaje-tipo">Chico</span>)
+      </div>
+      <div class="puntos-usuario" id="hud-puntos">
+        ⭐ 50 pts
+      </div>
+      <button type="button" class="btn-salir-header" onclick="salirDeLaPlaza()" title="Cambiar de personaje y salir">
+        🚪 Salir / Cambiar Personaje
+      </button>
+    </div>
+  </header>
+
+  <!-- Layout de 3 Columnas: Izquierda = Carrito | Centro = Mapa 2D | Derecha = Tienda / Plaza -->
+  <main class="app-layout">
+    
+    <!-- COLUMNA IZQUIERDA: CARRITO DE COMPRAS Y PUNTOS -->
+    <aside id="panel-izquierdo" class="panel-lateral">
+      <div class="panel-cabecera">
+        <div class="cabecera-con-icono">
+          <span class="panel-icono">🛒</span>
+          <div>
+            <h3>Carrito de Compras</h3>
+            <span class="panel-sub">Artículos (<span id="cant-articulos-carrito">0</span>)</span>
+          </div>
+        </div>
+        <div class="badge-puntos-acumulados" id="puntos-badge-izq" title="Tus puntos acumulados">
+          50 pts
+        </div>
+      </div>
+
+      <!-- Lista dinámica de productos agregados -->
+      <div id="lista-carrito" class="lista-carrito-scroll"></div>
+
+      <!-- Resumen y botón de pago -->
+      <div class="carrito-resumen">
+        <div class="fila-resumen">
+          <span>Puntos a ganar:</span>
+          <b class="puntos-ganar" id="puntos-a-ganar">+0 pts</b>
+        </div>
+        <div class="fila-total">
+          <span>TOTAL:</span>
+          <span class="monto-total">S/ <span id="total">0.00</span></span>
+        </div>
+        <button type="button" class="btn-pagar-pedido" onclick="pagarCarrito()">
+          💳 PAGAR PEDIDO
+        </button>
+        <button type="button" class="btn-vaciar-carrito" onclick="vaciarCarrito()">
+          🗑️ Vaciar Carrito
+        </button>
+      </div>
+    </aside>
+
+    <!-- COLUMNA CENTRAL: MAPA 2D INTERACTIVO -->
+    <section id="panel-central">
+      <!-- Barra de ayuda y estado del mapa -->
+      <div class="barra-mapa">
+        <div class="ayuda-teclas">
+          <span><b>WASD / Flechas</b> caminar</span>
+          <span><b>E</b> entrar a tienda</span>
+          <span><b>G</b> zonas caminables</span>
+        </div>
+        <div class="indicador-posicion">
+          <span id="hud-pos">x: 50.0%  y: 66.0%</span>
+        </div>
+      </div>
+
+      <!-- Contenedor del Juego 2D -->
+      <div id="game-container">
+        <!-- Mapa de fondo de Huacho -->
+        <img src="assets/MAPA2D/MAPA.jpg" id="game-map" alt="Plaza de Armas de Huacho">
+
+        <!-- Capa de depuración (zonas caminables) -->
+        <canvas id="capa-debug"></canvas>
+
+        <!-- Personaje Jugador -->
+        <div id="player">
+          <img src="assets/PERSONAJE/frames/p1-f1.png" alt="Personaje" id="player-sprite">
+        </div>
+
+        <!-- Puntos de interacción (Establecimientos) -->
+        <button class="shop-trigger" style="left: 18.3%; top: 31%;" title="Norky's" aria-label="Norky's"></button>
+        <button class="shop-trigger" style="left: 7.38%; top: 42.3%;" title="Tambo" aria-label="Tambo"></button>
+        <button class="shop-trigger" style="left: 29.7%; top: 18.3%;" title="Brujas" aria-label="Brujas"></button>
+        <button class="shop-trigger" style="left: 93.1%; top: 45.1%;" title="Chifa Beijing" aria-label="Chifa Beijing"></button>
+        <button class="shop-trigger" style="left: 8.9%; top: 85.3%;" title="Chifa Yoshi" aria-label="Chifa Yoshi"></button>
+        <!-- Compumark en X:72.2% Y:96.7% -->
+        <button class="shop-trigger" style="left: 72.2%; top: 96.7%;" title="Compumark" aria-label="Compumark"></button>
+
+        <!-- Cartel flotante de aviso de tienda cercana -->
+        <div id="pista-tienda"></div>
+
+        <!-- HUD flotante sobre el mapa -->
+        <div id="hud">
+          <span id="hud-cliente">👤 Invitado</span>
+        </div>
+      </div>
+
+      <div class="pie-mapa">
+        <span>📍 Plaza de Armas de Huacho - Explora libremente la plaza y acércate a los comercios para comprar.</span>
+      </div>
+    </section>
+
+    <!-- COLUMNA DERECHA: PLAZA DE ARMAS / TIENDA ACTIVA -->
+    <aside id="panel-derecho" class="panel-lateral">
+      <div id="panel-derecho-contenido">
+        <!-- Rellenado dinámicamente por productos.js (mostrarPlazaEnPanel o mostrarTiendaEnPanel) -->
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- Pantalla de titulo inicial (solo cuando no hay sesion guardada) -->
+  <div id="pantalla-titulo" class="pantalla-titulo hidden" role="button" tabindex="0" aria-label="Comenzar">
+    <div class="titulo-marco">
+      <h1>VENTAS GO</h1>
+      <p class="titulo-sub">PLAZA DE ARMAS DE HUACHO</p>
+      <p class="titulo-empezar">PRESIONA PARA COMENZAR</p>
+    </div>
+  </div>
+
+  <!-- Modal de Login y Selección de Personajes (Al iniciar o al salir) -->
+  <div id="login-modal" class="modal hidden">
+    <div class="modal-content login-content">
+      <div class="pixel-header">
+        <span class="login-logo-emoji">🏛️</span>
+        <h2>PLAZA DE ARMAS DE HUACHO</h2>
+        <p class="subtitulo">Selecciona tu personaje para ingresar al paseo</p>
+      </div>
+
+      <form id="form-login" onsubmit="iniciarSesion(event)">
+        <div class="campo">
+          <label for="input-nombre">TU NOMBRE DE JUGADOR:</label>
+          <input type="text" id="input-nombre" placeholder="Escribe tu nombre..." aria-required="true" autofocus maxlength="12">
+          <div id="login-error" class="login-error hidden" role="alert" aria-live="polite"></div>
+        </div>
+
+        <div class="campo">
+          <label>ELIGE TU PERSONAJE (Te acompañará durante toda la estadía):</label>
+          <div class="selector-personajes-login">
+            <button type="button" class="card-personaje activo" data-p="0" aria-pressed="true" onclick="seleccionarPersonajeLogin(0)">
+              <img src="assets/PERSONAJE/frames/p1-f1.png" alt="P1 Chico">
+              <b>P1 - Chico</b>
+              <small>Explorador</small>
+            </button>
+            <button type="button" class="card-personaje" data-p="1" aria-pressed="false" onclick="seleccionarPersonajeLogin(1)">
+              <img src="assets/PERSONAJE/frames/p2-f1.png" alt="P2 Chica">
+              <b>P2 - Chica</b>
+              <small>Visitante</small>
+            </button>
+          </div>
+          <small class="nota-personaje">Nota: No podrás cambiar de personaje hasta que salgas de la plaza.</small>
+        </div>
+
+        <button type="submit" class="btn-entrar">
+          🎮 INGRESAR A LA PLAZA DE ARMAS
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast flotante de notificaciones -->
+  <div id="toast-mensaje"></div>
+
+  <!-- Scripts en orden estricto de dependencias -->
+  <script src="js/mapa/datos.js"></script>
+  <script src="js/ventas/carrito.js"></script>
+  <script src="js/ventas/productos.js"></script>
+  <script src="js/mapa/zonas.js"></script>
+  <script src="js/mapa/juego.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
